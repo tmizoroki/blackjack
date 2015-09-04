@@ -6,3 +6,7 @@ class window.App extends Backbone.Model
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
 
+    (@get 'playerHand').on 'stand', =>
+      # window.a = @get 'dealerHand';
+      (@get 'dealerHand').at(0).flip()
+      (@get 'dealerHand').trigger("reveal")
