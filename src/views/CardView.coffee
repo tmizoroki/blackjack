@@ -9,7 +9,7 @@ class window.CardView extends Backbone.View
     @render()
     @model.on 'change:revealed', =>
       console.log "change revealed"
-      @render()
+      # @render()
     , @
 
 

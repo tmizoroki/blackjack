@@ -14,3 +14,15 @@
 .hand {
   overflow: auto;
 }
+
+.win {
+  color: green;
+}
+
+.lose {
+  color: red;
+}
+
+.tie {
+ color: orange;
+}

@@ -7,28 +7,41 @@ class window.App extends Backbone.Model
     @set 'dealerHand', deck.dealDealer()
 
     (@get 'playerHand').on 'stand', =>
-      # window.a = @get 'dealerHand';
       (@get 'dealerHand').at(0).flip()
       (@get 'dealerHand').trigger("reveal")
 
     (@get 'dealerHand').on 'dealerDone', =>
-      console.log "DEALER_DONE"
       @whoWon()
     (@get 'playerHand').on 'bust', =>
-      console.log "BUSTED"
       @whoWon()
+    (@get 'playerHand').on 'blackjack', =>
+      @blackjackWin()
 
   whoWon:  ->
+
     playerScore = (@get 'playerHand').score
     dealerScore = (@get 'dealerHand').score
 
     if playerScore > 21
-      alert "You busted!"
+      @trigger 'youbust', @
     else if playerScore > dealerScore
-      alert "You Win!"
+      @trigger 'youwin', @
     else if dealerScore > 21
-      alert "Dealer busted!"
+      @trigger 'youwin', @
     else if dealerScore > playerScore
-      alert "Dealer Wins!"
+      @trigger 'dealerwin', @
     else if dealerScore == playerScore
-      alert "It's a tie!"
+      @trigger 'tie', @
+
+  blackjackWin: ->
+    playerScore = (@get 'playerHand').score
+    dealerScore = (@get 'dealerHand').score
+
+    if dealerScore != 21
+      @trigger 'blackjack', @
+      (@get 'dealerHand').at(0).flip()
+      (@get 'dealerHand').trigger("reveal")
+    else
+      @trigger 'blackjacktie', @
+      (@get 'dealerHand').at(0).flip()
+      (@get 'dealerHand').trigger("reveal")

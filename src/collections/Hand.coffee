@@ -8,13 +8,14 @@ class window.Hand extends Backbone.Collection
     # Timing issue
     setTimeout =>
       @calculateScore()
+      if @score == 21 then @trigger 'blackjack', @
       return
     , 10
     return
 
   hit: ->
     @add(@deck.pop())
-    @calculateScore();
+    @calculateScore()
     @last() #why is this returning last?
 
   dealerHit: ->
