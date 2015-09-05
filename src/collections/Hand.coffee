@@ -19,8 +19,14 @@ class window.Hand extends Backbone.Collection
     @last() #why is this returning last?
 
   dealerHit: ->
-    while @score < 17 then @hit()
-    @trigger 'dealerDone', @
+    dealerLoop = setInterval((=>
+      if @score < 17
+        @hit()
+      else
+        clearInterval dealerLoop
+        @trigger 'dealerDone', this
+      return
+    ), 500)
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1
