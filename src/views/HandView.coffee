@@ -6,8 +6,6 @@ class window.HandView extends Backbone.View
   initialize: ->
     @collection.on 'recalculated', => @render()
     @collection.on 'add', => @render()
-    @collection.on 'bust', ->
-      alert 'You busted!'
     @render()
 
   render: ->
