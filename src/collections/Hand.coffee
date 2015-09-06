@@ -19,11 +19,11 @@ class window.Hand extends Backbone.Collection
     @last() #why is this returning last?
 
   dealerHit: ->
-    dealerLoop = setInterval((=>
+    window.dealerLoop = window.setInterval((=>
       if @score < 17
         @hit()
       else
-        clearInterval dealerLoop
+        clearInterval window.dealerLoop
         @trigger 'dealerDone', this
       return
     ), 500)

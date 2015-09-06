@@ -1,8 +1,12 @@
 # TODO: Refactor this model to use an internal Game Model instead
 # of containing the game logic directly.
 class window.App extends Backbone.Model
-  initialize: ->
-    @set 'deck', deck = new Deck()
+  initialize: (restart) ->
+    if !restart
+      console.log "new deck!"
+      @set 'deck', deck = new Deck()
+    else
+      deck = @get 'deck'
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
 
@@ -11,11 +15,15 @@ class window.App extends Backbone.Model
       (@get 'dealerHand').trigger("reveal")
 
     (@get 'dealerHand').on 'dealerDone', =>
+      console.log "Dealer done"
       @whoWon()
     (@get 'playerHand').on 'bust', =>
       @whoWon()
     (@get 'playerHand').on 'blackjack', =>
       @blackjackWin()
+    (@get 'deck').on 'reshuffled', ->
+      @trigger "reshuffled"
+      console.log "Reshuffled received!"
 
   whoWon:  ->
 
@@ -33,6 +41,7 @@ class window.App extends Backbone.Model
     else if dealerScore == playerScore
       @trigger 'tie', @
 
+
   blackjackWin: ->
     playerScore = (@get 'playerHand').score
     dealerScore = (@get 'dealerHand').score
@@ -45,3 +54,6 @@ class window.App extends Backbone.Model
       @trigger 'blackjacktie', @
       (@get 'dealerHand').at(0).flip()
       (@get 'dealerHand').trigger("reveal")
+
+  restart: ->
+    console.log "restarting..."

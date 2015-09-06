@@ -12,6 +12,18 @@ class window.AppView extends Backbone.View
       @model.get('playerHand').stand()
       @model.get('dealerHand').calculateScore()
       @model.get('dealerHand').dealerHit()
+    'click .restart-button': ->
+      @model.restart()
+      @render()
+      @$('.hit-button').show()
+      @$('.stand-button').show()
+      @$('.restart-button').hide()
+      @message = '<h2>Let\'s Play Some Blackjack!</h2>'
+      @gameover = false
+      @initialize()
+      @model.initialize(true)
+      @render()
+
 
   initialize: ->
     @message = '<h2>Let\'s Play Some Blackjack!</h2>'
@@ -41,15 +53,20 @@ class window.AppView extends Backbone.View
       @message = '<h2 class="tie">It\'s a Blackjack tie!</h2>'
       @gameover = true
       @render()
+    @model.on 'reshuffled', =>
+      @message = '<h2 class="tie">Deck was reshuffled!</h2>'
+      @render()
     @render()
 
   render: ->
     @$el.children().detach()
     @$el.html @template()
-    @$('.status').html (@message)
     if @gameover
-      @$('.hit-button').detach()
-      @$('.stand-button').detach()
+      @$('.status').html @message + '<button class="restart-button">Play Again?</button>'
+      @$('.hit-button').hide()
+      @$('.stand-button').hide()
+    else
+      @$('.status').html @message
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
     window.b = @$('.hit-button')

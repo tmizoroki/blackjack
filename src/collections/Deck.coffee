@@ -7,7 +7,17 @@ class window.Deck extends Backbone.Collection
         rank: card % 13
         suit: Math.floor(card / 13)
 
-  dealPlayer: -> new Hand [@pop(), @pop()], @, false
+  dealPlayer: ->
+    if @length < 10
+      console.log "Deck is less than 10 " + @length
+      @trigger "reshuffled", @
+      @initialize()
+    new Hand [@pop(), @pop()], @, false
 
-  dealDealer: -> new Hand [@pop().flip(), @pop()], @, true
+  dealDealer: ->
+    if @length < 10
+      console.log "Deck is less than 10 " + @length
+      @trigger "reshuffled", @
+      @initialize()
+    new Hand [@pop().flip(), @pop()], @, true
 

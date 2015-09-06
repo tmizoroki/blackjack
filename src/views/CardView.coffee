@@ -8,15 +8,13 @@ class window.CardView extends Backbone.View
   initialize: ->
     @render()
     @model.on 'change:revealed', =>
-      console.log "change revealed"
-      # @render()
+      @render()
     , @
 
 
   render: ->
     @$el.children().detach()
     @$el.html @template @model.attributes
-    console.log "render was called"
     @$el.removeClass 'covered'
     @$el.addClass 'covered' unless @model.get 'revealed'
 
